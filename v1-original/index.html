@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Peaky Blinders</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+      /* ── Original beginner CSS, bugs fixed ── */
+      body {
+        background-color: red;
+      }
+
+      .heading {
+        color: white;               /* fixed: missing semicolon */
+        font-size: 6rem;
+        font-family: "Ephesis", cursive;  /* fixed: wrong syntax (= instead of :, space in property) */
+        margin-left: 25rem;
+      }
+
+      .pics {
+        width: 100%;               /* fixed: missing semicolon */
+        height: auto;
+      }
+
+      /* Fixed: Google image search URLs don't work as backgrounds.
+         Replaced with direct image URLs that actually render. */
+      #image1 {
+        background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Peaky_Blinders_title_card.jpg/330px-Peaky_Blinders_title_card.jpg");
+        width: 300px;
+        height: 300px;
+        float: right;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      #image2 {
+        background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Peaky_Blinders_title_card.jpg/330px-Peaky_Blinders_title_card.jpg");
+        width: 300px;
+        height: 300px;
+        float: right;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      /* ── These were in HTML but missing from original CSS — added minimal styles ── */
+      .about {
+        color: white;
+        margin: 2rem;
+      }
+
+      #about-heading {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      #character-heading {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 2rem;
+      }
+
+      .character {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 1rem 2rem;
+        color: white;
+      }
+
+      .character div {
+        width: 150px;
+        border: 2px solid white;
+        padding: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Original beginner comment preserved -->
+    <!-- Original code started here — bugs fixed, spirit kept -->
+
+    <section class="heading animate__animated animate__bounceInLeft">
+      Peaky Blinders
+    </section>
+
+    <section class="pics">
+      <div id="image1"></div>
+      <div id="image2"></div>
+    </section>
+
+    <section class="about">
+      <div id="about-heading">About</div>
+      <div id="plot">
+        <p>
+          Britain is a mixture of despair and hedonism in 1919 in the aftermath of the Great War.
+          Returning soldiers, newly minted revolutions and criminal gangs are fighting for survival
+          in a nation rocked by economic upheaval. One of the most powerful gangs of the time is
+          the Peaky Blinders, run by returning war hero Thomas Shelby and his family. But Thomas
+          has bigger ambitions than just running the streets. When a crate of guns goes missing,
+          he recognizes an opportunity to advance in the world because crime may pay but legitimate
+          business pays better. Trying to rid Britain of its crime is Inspector Chester Campbell,
+          who arrives from Belfast to try to achieve that goal.
+        </p>
+      </div>
+    </section>
+
+    <div id="character-heading">Favourite Characters</div>
+
+    <section class="character">
+      <div id="Cimage1"><p>Thomas Shelby</p>Cillian Murphy</div>
+      <div id="Cimage2"><p>Polly Gray</p>Helen McCrory</div>
+      <div id="Cimage3"><p>Grace Burgess</p>Annabelle Wallis</div>
+      <div id="Cimage4"><p>Arthur Shelby</p>Paul Anderson</div>
+    </section>
+
+  </body>
+</html>
