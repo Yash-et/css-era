@@ -80,6 +80,13 @@ Not every project needs to be polished to matter. The 2019 version was built by 
 `css-era` is a reminder that expertise is just enthusiasm with time behind it.
 
 ---
+## Web Page
+
+<p align="center"> <img width="1918" height="912" alt="Original" src="https://github.com/user-attachments/assets/01aa56f5-3945-4a56-b967-86a719e53ac6" /> <strong>Original</strong></p>
+
+<p align="center"> <img width="1918" height="897" alt="New" src="https://github.com/user-attachments/assets/9de13ad6-8d40-49a6-a114-56a5ae31696b" /> <strong>New</strong></p>
+
+<p align="center"> <img width="1918" height="907" alt="Comparison" src="https://github.com/user-attachments/assets/60451ee6-43d3-4a3c-8a08-2e1088a63896" /> <strong>Comparison</strong></p>
 
 ## Part of NEXUS
 
