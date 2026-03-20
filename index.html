@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>css-era · Peaky Blinders — Then & Now</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Ephesis&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ════════════════════════════════════════════
+     ROOT TOKENS
+  ════════════════════════════════════════════ */
+  :root {
+    --gold:       #c9a84c;
+    --gold-dim:   #8a6a28;
+    --gold-pale:  #f0d99a;
+    --coal:       #0a0905;
+    --ink:        #12100c;
+    --ash:        #1e1b14;
+    --smoke:      #2c2820;
+    --fog:        #a89b7e;
+    --white:      #f5efe0;
+    --red:        #cc0000;
+    --mono:       "JetBrains Mono", monospace;
+    --font-display: "Cinzel Decorative", serif;
+    --font-heading: "Cinzel", serif;
+    --font-body:    "EB Garamond", serif;
+    --font-og:      "Ephesis", cursive;
+  }
+
+  /* ════════════════════════════════════════════
+     RESET
+  ════════════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--coal);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Film grain overlay */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  }
+
+  /* ════════════════════════════════════════════
+     SHOWCASE HEADER
+  ════════════════════════════════════════════ */
+  .showcase-header {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+  }
+
+  .repo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--ash);
+    border: 1px solid var(--smoke);
+    border-radius: 2px;
+    padding: 0.35rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s forwards;
+  }
+
+  .repo-badge::before {
+    content: "⌥";
+    opacity: 0.5;
+  }
+
+  .showcase-eyebrow {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .showcase-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 6vw, 5rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    opacity: 0;
+    animation: fadeUp 1s 0.35s forwards;
+    text-shadow: 0 0 60px rgba(201,168,76,0.15);
+  }
+
+  .showcase-title em {
+    color: var(--gold);
+    font-style: normal;
+    display: block;
+    font-size: 0.55em;
+    letter-spacing: 0.18em;
+    margin-top: 0.3em;
+    font-family: var(--font-heading);
+    font-weight: 400;
+  }
+
+  .showcase-desc {
+    max-width: 540px;
+    margin: 2rem auto 0;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--fog);
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.55s forwards;
+  }
+
+  /* Timeline connector */
+  .timeline-bridge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 3rem auto 0;
+    max-width: 360px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.75s forwards;
+  }
+
+  .tl-year {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+
+  .tl-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+    position: relative;
+  }
+
+  .tl-line::after {
+    content: "▶";
+    position: absolute;
+    right: -4px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.5rem;
+    color: var(--gold);
+  }
+
+  /* ════════════════════════════════════════════
+     COMPARISON WRAPPER
+  ════════════════════════════════════════════ */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 4rem;
+    border-top: 1px solid var(--smoke);
+    min-height: 100vh;
+  }
+
+  /* Panel labels */
+  .panel-label {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid;
+  }
+
+  .panel-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .panel-label .file {
+    flex: 1;
+  }
+
+  .panel-label .era-tag {
+    font-family: var(--font-heading);
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    border: 1px solid currentColor;
+    opacity: 0.6;
+  }
+
+  /* ── LEFT: ORIGINAL ── */
+  .panel-old {
+    background: #cc0000;
+    border-right: 1px solid rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .panel-old .panel-label {
+    background: rgba(180,0,0,0.95);
+    backdrop-filter: blur(8px);
+    border-color: rgba(0,0,0,0.3);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .panel-old .dot { background: #ff6b6b; }
+
+  /* ── RIGHT: MODERN ── */
+  .panel-new {
+    background: var(--coal);
+    position: relative;
+  }
+
+  .panel-new .panel-label {
+    background: rgba(10,9,5,0.95);
+    backdrop-filter: blur(8px);
+    border-color: var(--smoke);
+    color: var(--fog);
+  }
+
+  .panel-new .dot { background: var(--gold); }
+
+  /* ════════════════════════════════════════════
+     OLD VERSION CONTENT
+  ════════════════════════════════════════════ */
+  .old-content {
+    padding: 2.5rem 2rem 4rem;
+    font-family: "Arial", sans-serif; /* intentionally keeping the "era" feel */
+  }
+
+  .old-heading {
+    font-family: var(--font-og);
+    color: white;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-left: 0; /* was 25rem — removed for readability in panel */
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  /* Pics section — old */
+  .old-pics {
+    width: 100%;
+    background: rgba(0,0,0,0.25);
+    border: 2px dashed rgba(255,255,255,0.3);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .old-pics-label {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--mono);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .old-image-box {
+    width: 140px;
+    height: 140px;
+    float: right;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--mono);
+    text-align: center;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .old-about {
+    color: white;
+    clear: both;
+  }
+
+  .old-about h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  }
+
+  .old-about p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    background: rgba(0,0,0,0.2);
+    padding: 1rem;
+    border-left: 3px solid rgba(255,255,255,0.4);
+  }
+
+  .old-chars-heading {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .old-chars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .old-char-box {
+    width: calc(50% - 0.25rem);
+    border: 2px solid white;
+    padding: 0.75rem;
+    text-align: center;
+    color: white;
+    font-size: 0.8rem;
+    background: rgba(0,0,0,0.15);
+  }
+
+  .old-char-box p {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Bug callout annotations */
+  .bug-tag {
+    display: inline-block;
+    background: #ffdd57;
+    color: #333;
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    cursor: default;
+    position: relative;
+  }
+
+  .bug-tag:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 130%;
+    left: 0;
+    white-space: nowrap;
+    background: #333;
+    color: #ffdd57;
+    padding: 0.4rem 0.7rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* ════════════════════════════════════════════
+     NEW VERSION CONTENT
+  ════════════════════════════════════════════ */
+  .new-content {
+    padding: 2.5rem 2rem 4rem;
+    position: relative;
+  }
+
+  /* Mini hero in panel */
+  .new-hero-mini {
+    text-align: center;
+    padding: 2rem 1rem 2.5rem;
+    border-bottom: 1px solid var(--smoke);
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .new-hero-mini::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .new-eyebrow {
+    font-family: var(--font-heading);
+    font-size: 0.58rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.6rem;
+  }
+
+  .new-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
+    font-weight: 900;
+    color: var(--white);
+    text-shadow: 0 0 40px rgba(201,168,76,0.2);
+    line-height: 1;
+  }
+
+  .new-title-sub {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    color: var(--gold);
+    display: block;
+    margin-top: 0.25em;
+  }
+
+  .new-rule {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem auto;
+  }
+
+  .new-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+
+  /* Synopsis */
+  .new-section-label {
+    font-family: var(--font-heading);
+    font-size: 0.58rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .new-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--smoke);
+    position: relative;
+  }
+
+  .new-section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 40px; height: 2px;
+    background: var(--gold);
+  }
+
+  .new-synopsis {
+    font-size: 0.95rem;
+    color: var(--fog);
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── CHARACTER CARDS — THE MAGIC ── */
+  .new-chars-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .new-char-card {
+    position: relative;
+    background: var(--ash);
+    border: 1px solid var(--smoke);
+    overflow: hidden;
+    cursor: pointer;
+    /* Custom cursor */
+    cursor: crosshair;
+    aspect-ratio: 3/4;
+    transition: border-color 0.3s ease;
+  }
+
+  .new-char-card:hover {
+    border-color: var(--gold-dim);
+  }
+
+  /* Background pattern per card */
+  .new-char-card::before {
+    content: "";
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  /* Each character gets a unique atmospheric BG */
+  .new-char-card[data-char="thomas"]::before {
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(201,168,76,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(139,26,26,0.2) 0%, transparent 60%);
+  }
+
+  .new-char-card[data-char="polly"]::before {
+    background:
+      radial-gradient(ellipse at 70% 0%, rgba(180,120,200,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 100%, rgba(201,168,76,0.1) 0%, transparent 55%);
+  }
+
+  .new-char-card[data-char="grace"]::before {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(200,220,255,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.12) 0%, transparent 55%);
+  }
+
+  .new-char-card[data-char="arthur"]::before {
+    background:
+      radial-gradient(ellipse at 10% 50%, rgba(200,60,60,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 50%, rgba(80,80,80,0.2) 0%, transparent 55%);
+  }
+
+  .new-char-card:hover::before { opacity: 1; }
+
+  /* Initial monogram */
+  .char-monogram {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(201,168,76,0.07);
+    line-height: 1;
+    transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease, color 0.4s ease;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .new-char-card:hover .char-monogram {
+    transform: translate(-50%, -70%) scale(0.6);
+    opacity: 0.03;
+  }
+
+  /* Static bottom info */
+  .char-base {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1rem;
+    background: linear-gradient(to top, var(--ash) 60%, transparent);
+    transform: translateY(0);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .new-char-card:hover .char-base {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  .char-base-name {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.06em;
+  }
+
+  .char-base-actor {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--gold);
+  }
+
+  /* ══ HOVER REVEAL OVERLAY ══ */
+  .char-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(10,9,5,0.96) 0%,
+      rgba(10,9,5,0.7) 50%,
+      rgba(10,9,5,0.1) 100%
+    );
+  }
+
+  .new-char-card:hover .char-reveal {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Animated lines in reveal */
+  .reveal-line {
+    overflow: hidden;
+  }
+
+  .reveal-line span {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .new-char-card:hover .reveal-line:nth-child(1) span { transform: translateY(0); transition-delay: 0.05s; }
+  .new-char-card:hover .reveal-line:nth-child(2) span { transform: translateY(0); transition-delay: 0.1s; }
+  .new-char-card:hover .reveal-line:nth-child(3) span { transform: translateY(0); transition-delay: 0.15s; }
+  .new-char-card:hover .reveal-line:nth-child(4) span { transform: translateY(0); transition-delay: 0.2s; }
+  .new-char-card:hover .reveal-line:nth-child(5) span { transform: translateY(0); transition-delay: 0.25s; }
+
+  .reveal-char-name {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.1rem;
+  }
+
+  .reveal-actor {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--gold);
+    margin-bottom: 0.7rem;
+  }
+
+  .reveal-divider {
+    width: 30px;
+    height: 1px;
+    background: var(--gold-dim);
+    margin-bottom: 0.7rem;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease 0.3s;
+  }
+
+  .new-char-card:hover .reveal-divider {
+    transform: scaleX(1);
+  }
+
+  .reveal-desc {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--fog);
+    line-height: 1.55;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Quote line in reveal */
+  .reveal-quote {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.75rem;
+    color: rgba(201,168,76,0.7);
+    line-height: 1.5;
+    border-left: 2px solid var(--gold-dim);
+    padding-left: 0.6rem;
+  }
+
+  /* Scanline effect on hover */
+  .new-char-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .new-char-card:hover::after { opacity: 1; }
+
+  /* Corner bracket decoration */
+  .corner-tl, .corner-br {
+    position: absolute;
+    width: 16px; height: 16px;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  .corner-tl {
+    top: 8px; left: 8px;
+    border-top: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+    transform: translate(-4px, -4px);
+  }
+
+  .corner-br {
+    bottom: 8px; right: 8px;
+    border-bottom: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    transform: translate(4px, 4px);
+  }
+
+  .new-char-card:hover .corner-tl { opacity: 1; transform: translate(0,0); }
+  .new-char-card:hover .corner-br { opacity: 1; transform: translate(0,0); }
+
+  /* ════════════════════════════════════════════
+     DIVIDER BETWEEN PANELS
+  ════════════════════════════════════════════ */
+  .panel-divider-v {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim) 20%, var(--gold-dim) 80%, transparent);
+    pointer-events: none;
+    z-index: 200;
+    display: none; /* handled by grid gap=0 border */
+  }
+
+  /* ════════════════════════════════════════════
+     BOTTOM CALLOUT
+  ════════════════════════════════════════════ */
+  .callout {
+    background: var(--ash);
+    border-top: 1px solid var(--smoke);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .callout::before {
+    content: "css-era";
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 14vw;
+    font-weight: 900;
+    color: rgba(201,168,76,0.025);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .callout-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    margin-bottom: 1rem;
+  }
+
+  .callout-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    color: var(--white);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .callout-desc {
+    font-family: var(--font-body);
+    font-style: italic;
+    color: var(--fog);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  /* Code diff block */
+  .diff-block {
+    background: var(--ink);
+    border: 1px solid var(--smoke);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+
+  .diff-removed { color: #ff6b6b; }
+  .diff-removed::before { content: "−  "; opacity: 0.6; }
+  .diff-added   { color: #6bffb8; }
+  .diff-added::before   { content: "+  "; opacity: 0.6; }
+  .diff-neutral { color: var(--fog); }
+  .diff-neutral::before { content: "   "; }
+
+  /* ════════════════════════════════════════════
+     FOOTER
+  ════════════════════════════════════════════ */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid var(--smoke);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-sub {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.2em;
+  }
+
+  /* ════════════════════════════════════════════
+     ANIMATIONS
+  ════════════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .comparison {
+      grid-template-columns: 1fr;
+    }
+    .panel-old {
+      border-right: none;
+      border-bottom: 4px solid rgba(0,0,0,0.5);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .new-chars-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .old-chars { gap: 0.4rem; }
+    .old-char-box { width: calc(50% - 0.2rem); }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- ════ SHOWCASE HEADER ════ -->
+  <header class="showcase-header">
+    <div class="repo-badge">css-era / peaky-blinders</div>
+    <p class="showcase-eyebrow">A CSS Journey · 2019 → 2026</p>
+    <h1 class="showcase-title">
+      Then &amp; Now
+      <em>Peaky Blinders Fan Page</em>
+    </h1>
+    <p class="showcase-desc">
+      The same subject. Two eras of knowledge. A tribute to how far the craft has come —
+      and how every beginner's red background leads somewhere extraordinary.
+    </p>
+    <div class="timeline-bridge">
+      <span class="tl-year">2019</span>
+      <div class="tl-line"></div>
+      <span class="tl-year">2026</span>
+    </div>
+  </header>
+
+  <!-- ════ SIDE-BY-SIDE COMPARISON ════ -->
+  <div class="comparison">
+
+    <!-- ── LEFT: ORIGINAL ── -->
+    <div class="panel-old">
+      <div class="panel-label">
+        <div class="dot"></div>
+        <span class="file">index.html · Series.css</span>
+        <span class="era-tag">2019 · v1.0</span>
+      </div>
+
+      <div class="old-content">
+        <div class="old-heading">
+          Peaky Blinders
+          <span class="bug-tag" data-tip="Missing semicolons on color & width properties">BUG ×3</span>
+        </div>
+
+        <div class="old-pics">
+          <div class="old-pics-label">// .pics section — background-image used Google search URLs (broken)</div>
+          <div class="old-image-box">
+            #image1<br/>background-image:<br/>google.com/imgres?…<br/><br/>⚠ URL never loads
+          </div>
+          <div class="old-image-box" style="float:right; margin-left:0; margin-right:0.5rem;">
+            #image2<br/>background-image:<br/>google.com/imgres?…<br/><br/>⚠ URL never loads
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+
+        <div class="old-about">
+          <h2>About <span class="bug-tag" data-tip="font-family had = instead of : and space in property name">font family= &quot;Ephesis&quot;</span></h2>
+          <p>
+            Britain is a mixture of despair and hedonism in 1919 in the aftermath of the Great War.
+            Returning soldiers, newly minted revolutions and criminal gangs are fighting for survival
+            in a nation rocked by economic upheaval. One of the most powerful gangs of the time is the
+            Peaky Blinders, run by returning war hero Thomas Shelby and his family.
+          </p>
+        </div>
+
+        <div class="old-chars-heading">Favourite Characters</div>
+        <div class="old-chars">
+          <div class="old-char-box"><p>Thomas Shelby</p>Cillian Murphy</div>
+          <div class="old-char-box"><p>Polly Gray</p>Helen McCrory</div>
+          <div class="old-char-box"><p>Grace Burgess</p>Annabelle Wallis</div>
+          <div class="old-char-box"><p>Arthur Shelby</p>Paul Anderson</div>
+        </div>
+
+        <!-- Honest note -->
+        <div style="margin-top:2rem; padding:1rem; border:1px dashed rgba(255,255,255,0.25); font-size:0.75rem; color:rgba(255,255,255,0.55); font-family:var(--mono); line-height:1.7;">
+          // Every great developer wrote code like this once.<br/>
+          // The red background. The broken URLs. The font-family=.<br/>
+          // This is where the journey begins. 🔥
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: MODERN ── -->
+    <div class="panel-new">
+      <div class="panel-label">
+        <div class="dot"></div>
+        <span class="file">index.html · (CSS-in-HTML)</span>
+        <span class="era-tag">2026 · v2.0</span>
+      </div>
+
+      <div class="new-content">
+
+        <!-- Mini hero -->
+        <div class="new-hero-mini">
+          <p class="new-eyebrow">BBC One · 2013 – 2022</p>
+          <div class="new-rule"></div>
+          <h2 class="new-title">
+            Peaky
+            <span class="new-title-sub">Blinders</span>
+          </h2>
+          <div class="new-rule"></div>
+          <div class="new-meta">
+            <span>6 Series</span>
+            <span>·</span>
+            <span>36 Episodes</span>
+            <span>·</span>
+            <span>Steven Knight</span>
+          </div>
+        </div>
+
+        <!-- Synopsis -->
+        <p class="new-section-label">The Story</p>
+        <h3 class="new-section-title">Post-War Birmingham.<br/>One Family's Ambition.</h3>
+        <p class="new-synopsis">
+          Britain, 1919. The Great War has ended, but its scars run deep. At the centre of it all:
+          Thomas Shelby — war hero turned gang lord, whose razor-sharp mind drives his family from
+          the back streets of Small Heath toward the corridors of Westminster itself.
+        </p>
+
+        <!-- Characters — THE MAGIC -->
+        <p class="new-section-label" style="margin-top:2rem;">The Family</p>
+        <h3 class="new-section-title" style="margin-bottom:1.25rem;">Favourite Characters</h3>
+
+        <p style="font-family:var(--mono);font-size:0.6rem;color:var(--gold-dim);margin-bottom:1rem;letter-spacing:0.1em;">
+          // hover over each card
+        </p>
+
+        <div class="new-chars-grid">
+
+          <!-- THOMAS -->
+          <div class="new-char-card" data-char="thomas">
+            <div class="char-monogram">T</div>
+            <div class="corner-tl"></div>
+            <div class="corner-br"></div>
+            <div class="char-base">
+              <div class="char-base-name">Thomas Shelby</div>
+              <div class="char-base-actor">Cillian Murphy</div>
+            </div>
+            <div class="char-reveal">
+              <div class="reveal-line"><span class="reveal-char-name">Thomas Shelby</span></div>
+              <div class="reveal-line"><span class="reveal-actor">Cillian Murphy</span></div>
+              <div class="reveal-divider"></div>
+              <div class="reveal-line"><span class="reveal-desc">
+                Visionary. Ruthless. Haunted by the tunnels of France. The architect of an empire built from razor-blade ambition and cold calculation.
+              </span></div>
+              <div class="reveal-line"><span class="reveal-quote">
+                "I'm not a traitor to my class. I am just an extreme example of what a working man can achieve."
+              </span></div>
+            </div>
+          </div>
+
+          <!-- POLLY -->
+          <div class="new-char-card" data-char="polly">
+            <div class="char-monogram">P</div>
+            <div class="corner-tl"></div>
+            <div class="corner-br"></div>
+            <div class="char-base">
+              <div class="char-base-name">Polly Gray</div>
+              <div class="char-base-actor">Helen McCrory</div>
+            </div>
+            <div class="char-reveal">
+              <div class="reveal-line"><span class="reveal-char-name">Polly Gray</span></div>
+              <div class="reveal-line"><span class="reveal-actor">Helen McCrory</span></div>
+              <div class="reveal-divider"></div>
+              <div class="reveal-line"><span class="reveal-desc">
+                The matriarch. Fiercely intelligent, spiritually attuned, and the only person Thomas truly fears. The family's moral compass and financial mind.
+              </span></div>
+              <div class="reveal-line"><span class="reveal-quote">
+                "I curse you with knowledge, Thomas Shelby. I curse you with knowing what you're doing."
+              </span></div>
+            </div>
+          </div>
+
+          <!-- GRACE -->
+          <div class="new-char-card" data-char="grace">
+            <div class="char-monogram">G</div>
+            <div class="corner-tl"></div>
+            <div class="corner-br"></div>
+            <div class="char-base">
+              <div class="char-base-name">Grace Burgess</div>
+              <div class="char-base-actor">Annabelle Wallis</div>
+            </div>
+            <div class="char-reveal">
+              <div class="reveal-line"><span class="reveal-char-name">Grace Burgess</span></div>
+              <div class="reveal-line"><span class="reveal-actor">Annabelle Wallis</span></div>
+              <div class="reveal-divider"></div>
+              <div class="reveal-line"><span class="reveal-desc">
+                A woman of secrets, sent to destroy the Shelbys — and instead found herself irrevocably entwined with their fate and their most dangerous man.
+              </span></div>
+              <div class="reveal-line"><span class="reveal-quote">
+                "There are things that happen and leave no particular mark, and then there are the things you can't stop thinking about."
+              </span></div>
+            </div>
+          </div>
+
+          <!-- ARTHUR -->
+          <div class="new-char-card" data-char="arthur">
+            <div class="char-monogram">A</div>
+            <div class="corner-tl"></div>
+            <div class="corner-br"></div>
+            <div class="char-base">
+              <div class="char-base-name">Arthur Shelby</div>
+              <div class="char-base-actor">Paul Anderson</div>
+            </div>
+            <div class="char-reveal">
+              <div class="reveal-line"><span class="reveal-char-name">Arthur Shelby</span></div>
+              <div class="reveal-line"><span class="reveal-actor">Paul Anderson</span></div>
+              <div class="reveal-divider"></div>
+              <div class="reveal-line"><span class="reveal-desc">
+                Volatile, ferociously loyal, and consumed by the ghosts of the Somme. The heart of the Peaky Blinders — wild, destructive, and achingly human.
+              </span></div>
+              <div class="reveal-line"><span class="reveal-quote">
+                "By order of the Peaky Blinders."
+              </span></div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /chars grid -->
+
+      </div>
+    </div>
+    <!-- /panel-new -->
+
+  </div>
+  <!-- /comparison -->
+
+  <!-- ════ DIFF CALLOUT ════ -->
+  <section class="callout">
+    <div class="callout-inner">
+      <p class="callout-label">// what changed</p>
+      <h2 class="callout-title">Five Years of Growth</h2>
+      <p class="callout-desc">
+        Same passion. Same subject. Completely different vocabulary.
+        This is what learning looks like over time.
+      </p>
+      <div class="diff-block">
+        <div class="diff-removed">font family= "Ephesis", cursive;</div>
+        <div class="diff-added">font-family: "Cinzel Decorative", serif;</div>
+        <div class="diff-neutral">&nbsp;</div>
+        <div class="diff-removed">background-image: url("google.com/imgres?…");</div>
+        <div class="diff-added">background: radial-gradient(ellipse at 50% 0%, …);</div>
+        <div class="diff-neutral">&nbsp;</div>
+        <div class="diff-removed">border: 2px solid white;</div>
+        <div class="diff-added">transform + opacity + transition: all 0.45s ease;</div>
+        <div class="diff-neutral">&nbsp;</div>
+        <div class="diff-removed">color: white  /* missing semicolon */</div>
+        <div class="diff-added">--gold: #c9a84c; /* CSS custom properties */</div>
+        <div class="diff-neutral">&nbsp;</div>
+        <div class="diff-neutral">/* The red background was bold. Keep that energy. */</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <p class="footer-logo">css-era</p>
+    <p class="footer-sub">peaky-blinders · 2019 → 2026 · built with NEXUS</p>
+  </footer>
+
+</body>
+</html>
