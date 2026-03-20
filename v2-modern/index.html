@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peaky Blinders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --gold:      #c9a84c;
+      --gold-dim:  #8a6a28;
+      --gold-pale: #f0d99a;
+      --coal:      #0a0905;
+      --ink:       #12100c;
+      --ash:       #1e1b14;
+      --smoke:     #2c2820;
+      --fog:       #a89b7e;
+      --white:     #f5efe0;
+      --red:       #8b1a1a;
+
+      --font-display: "Cinzel Decorative", serif;
+      --font-heading: "Cinzel", serif;
+      --font-body:    "EB Garamond", serif;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--coal);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay on entire page */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+      background: var(--coal);
+    }
+
+    /* Dramatic radial vignette */
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, transparent 20%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+
+    /* Horizontal rule decoration */
+    .hero-rule {
+      width: 280px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeUp 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 8rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--white);
+      text-shadow:
+        0 0 60px rgba(201,168,76,0.3),
+        0 4px 40px rgba(0,0,0,0.9);
+      opacity: 0;
+      animation: fadeUp 1.2s 0.4s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--fog);
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s 1.1s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-meta-item {
+      text-align: center;
+    }
+
+    .hero-meta-item .label {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .hero-meta-item .value {
+      font-size: 0.95rem;
+      color: var(--fog);
+    }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0;
+      animation: fadeIn 1s 2s forwards;
+      z-index: 1;
+    }
+
+    .scroll-cue span {
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION SHARED
+    ═══════════════════════════════════════════ */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 2rem;
+      position: relative;
+      padding-bottom: 1.25rem;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════
+       DIVIDER
+    ═══════════════════════════════════════════ */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--smoke), transparent);
+    }
+
+    .divider-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       SYNOPSIS
+    ═══════════════════════════════════════════ */
+    .synopsis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .synopsis-body {
+      font-size: 1.1rem;
+      color: var(--fog);
+      line-height: 1.9;
+    }
+
+    .synopsis-body p + p { margin-top: 1.2rem; }
+
+    .synopsis-visual {
+      position: relative;
+    }
+
+    .poster-frame {
+      aspect-ratio: 2/3;
+      background: var(--ash);
+      border: 1px solid var(--smoke);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(30%) contrast(1.1) brightness(0.85);
+      transition: transform 0.8s ease, filter 0.8s ease;
+    }
+
+    .poster-frame:hover img {
+      transform: scale(1.05);
+      filter: sepia(10%) contrast(1.05) brightness(0.95);
+    }
+
+    .poster-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,9,5,0.7) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Gold corner accents */
+    .poster-frame::before {
+      content: "";
+      position: absolute;
+      top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 1px solid rgba(201,168,76,0.25);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .poster-caption {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       CHARACTERS
+    ═══════════════════════════════════════════ */
+    .characters-bg {
+      background: var(--ash);
+      border-top: 1px solid var(--smoke);
+      border-bottom: 1px solid var(--smoke);
+      position: relative;
+    }
+
+    /* Subtle pattern overlay */
+    .characters-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 40px,
+          rgba(201,168,76,0.03) 40px,
+          rgba(201,168,76,0.03) 41px
+        );
+      pointer-events: none;
+    }
+
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .char-card {
+      position: relative;
+      cursor: default;
+    }
+
+    .char-img-wrap {
+      aspect-ratio: 3/4;
+      background: var(--smoke);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .char-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: rgba(201,168,76,0.2);
+      background: linear-gradient(135deg, var(--smoke) 0%, var(--ink) 100%);
+    }
+
+    .char-initial {
+      color: var(--gold-dim);
+      font-size: 4rem;
+      font-family: var(--font-display);
+    }
+
+    /* hover reveal */
+    .char-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,9,5,0.95) 40%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem;
+      transform: translateY(30%);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .char-card:hover .char-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Always show name below */
+    .char-info {
+      padding: 1rem 0 0;
+    }
+
+    .char-name {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .char-actor {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+
+    .char-desc {
+      font-size: 0.8rem;
+      color: var(--fog);
+      line-height: 1.5;
+      margin-top: 0.3rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       STATS BAR
+    ═══════════════════════════════════════════ */
+    .stats-bar {
+      background: var(--ink);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 0.4rem;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════════
+       QUOTE
+    ═══════════════════════════════════════════ */
+    .quote-section {
+      text-align: center;
+      padding: 7rem 2rem;
+      position: relative;
+    }
+
+    .quote-section::before {
+      content: "\201C";
+      font-family: var(--font-display);
+      font-size: 20rem;
+      color: rgba(201,168,76,0.04);
+      position: absolute;
+      top: -3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    blockquote {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    blockquote p {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 1.5rem;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid var(--smoke);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-note {
+      font-size: 0.8rem;
+      color: var(--gold-dim);
+      font-family: var(--font-heading);
+      letter-spacing: 0.2em;
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      50%       { opacity: 1;   transform: scaleY(1.2); }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Staggered children */
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0s; }
+    .stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.12s; }
+    .stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.24s; }
+    .stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.36s; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .synopsis-grid { grid-template-columns: 1fr; }
+      .synopsis-visual { display: none; }
+      .characters-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .characters-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ─────────────────────────────── -->
+  <header class="hero">
+    <p class="hero-eyebrow">BBC One · 2013 – 2022</p>
+
+    <div class="hero-rule"></div>
+
+    <h1 class="hero-title">
+      Peaky<span>Blinders</span>
+    </h1>
+
+    <div class="hero-rule"></div>
+
+    <p class="hero-subtitle">
+      By order of the Peaky Blinders.
+    </p>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="label">Seasons</span>
+        <span class="value">6</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Episodes</span>
+        <span class="value">36</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Created by</span>
+        <span class="value">Steven Knight</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ── SYNOPSIS ──────────────────────────── -->
+  <section class="section">
+    <div class="synopsis-grid">
+      <div class="reveal">
+        <p class="section-label">The Story</p>
+        <h2 class="section-title">Post-War Birmingham.<br/>One Family's Ambition.</h2>
+        <div class="synopsis-body">
+          <p>
+            Britain, 1919. The Great War has ended, but its scars run deep. Returning soldiers,
+            revolutionary fervour and criminal enterprises jostle for power in a nation torn apart
+            by economic collapse and social upheaval.
+          </p>
+          <p>
+            At the centre of it all: Thomas Shelby. War hero turned gang lord, a man whose razor-sharp
+            mind and cold-blooded resolve drive his family from the back streets of Small Heath toward
+            the corridors of Westminster itself.
+          </p>
+          <p>
+            But power invites enemies — and Inspector Chester Campbell has arrived from Belfast with
+            a singular mission: to destroy everything the Shelbys have built.
+          </p>
+        </div>
+      </div>
+      <div class="synopsis-visual reveal">
+        <div class="poster-frame">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Peaky_Blinders_title_card.jpg/330px-Peaky_Blinders_title_card.jpg"
+            alt="Peaky Blinders"
+            onerror="this.style.display='none'"
+          />
+        </div>
+        <p class="poster-caption">Peaky Blinders &mdash; BBC One</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+  <!-- ── CHARACTERS ─────────────────────────── -->
+  <section class="characters-bg">
+    <div class="section">
+      <p class="section-label">The Family</p>
+      <h2 class="section-title reveal">Favourite Characters</h2>
+
+      <div class="characters-grid stagger">
+
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <div class="char-img-placeholder">
+              <span class="char-initial">T</span>
+            </div>
+            <div class="char-overlay">
+              <p class="char-desc">Visionary, ruthless, haunted — the architect of the Shelby empire.</p>
+            </div>
+          </div>
+          <div class="char-info">
+            <p class="char-name">Thomas Shelby</p>
+            <p class="char-actor">Cillian Murphy</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <div class="char-img-placeholder">
+              <span class="char-initial">P</span>
+            </div>
+            <div class="char-overlay">
+              <p class="char-desc">The matriarch. Fiercely intelligent and the family's moral compass.</p>
+            </div>
+          </div>
+          <div class="char-info">
+            <p class="char-name">Polly Gray</p>
+            <p class="char-actor">Helen McCrory</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <div class="char-img-placeholder">
+              <span class="char-initial">G</span>
+            </div>
+            <div class="char-overlay">
+              <p class="char-desc">A woman of secrets — caught between duty and desire.</p>
+            </div>
+          </div>
+          <div class="char-info">
+            <p class="char-name">Grace Burgess</p>
+            <p class="char-actor">Annabelle Wallis</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <div class="char-img-placeholder">
+              <span class="char-initial">A</span>
+            </div>
+            <div class="char-overlay">
+              <p class="char-desc">Volatile, loyal, and consumed by the ghosts of the Somme.</p>
+            </div>
+          </div>
+          <div class="char-info">
+            <p class="char-name">Arthur Shelby</p>
+            <p class="char-actor">Paul Anderson</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS ─────────────────────────────── -->
+  <div class="stats-bar">
+    <div class="stats-inner stagger">
+      <div>
+        <span class="stat-num">6</span>
+        <span class="stat-label">Series</span>
+      </div>
+      <div>
+        <span class="stat-num">9.3</span>
+        <span class="stat-label">IMDb Rating</span>
+      </div>
+      <div>
+        <span class="stat-num">1919</span>
+        <span class="stat-label">Setting Begins</span>
+      </div>
+      <div>
+        <span class="stat-num">36</span>
+        <span class="stat-label">Episodes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUOTE ──────────────────────────────── -->
+  <section class="quote-section reveal">
+    <blockquote>
+      <p>"I'm not a traitor to my class. I am just an extreme example of what a working man can achieve."</p>
+      <cite>Thomas Shelby, Series 2</cite>
+    </blockquote>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+  <!-- ── FOOTER ─────────────────────────────── -->
+  <footer>
+    <p class="footer-logo">PEAKY BLINDERS</p>
+    <p class="footer-note">A fan tribute &nbsp;·&nbsp; 2019 – 2026 &nbsp;·&nbsp; Built with NEXUS</p>
+  </footer>
+
+  <!-- ── SCROLL REVEAL SCRIPT ───────────────── -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll(".reveal, .stagger").forEach((el) => observer.observe(el));
+  </script>
+
+</body>
+</html>
