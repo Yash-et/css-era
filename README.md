@@ -4,7 +4,7 @@
 
 `css-era` is a personal archive and living showcase of growth as a frontend developer — told through a single subject: **Peaky Blinders**.
 
-In 2019, at the very beginning of a CSS journey, a fan page was built. Red background. Ephesis font. Broken image URLs. A `font family=` that never worked. It was imperfect, honest, and exactly what every developer's first project looks like.
+In 2021, at the very beginning of a CSS journey, a fan page was built. Red background. Ephesis font. Broken image URLs. A `font family=` that never worked. It was imperfect, honest, and exactly what every developer's first project looks like.
 
 In 2026, the same page was rebuilt from scratch — not to erase what came before, but to place both versions side by side and let the distance speak for itself.
 
